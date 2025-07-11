@@ -76,6 +76,9 @@ unexpected_cfgs = { level = "warn", check-cfg = ['cfg(docsrs_dep)'] }
 unsafe_code = "deny"
 unsafe_op_in_unsafe_fn = "warn"
 unused_qualifications = "warn"
+mismatched_lifetime_syntaxes = "allow"
+unpredictable_function_pointer_comparisons = "allow"
+unused = "allow"
 
 # Unfortunately, cargo does not currently support overriding workspace lints
 # inside a particular crate. See https://github.com/rust-lang/cargo/issues/13157
