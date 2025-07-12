@@ -230,6 +230,8 @@ enum BindingResourceId {
     Buffer(BufferId),
     /// A texture view, with the given dimension.
     TextureView(TextureViewDimension, TextureViewId),
+    /// An array of texture views, all with the given dimension.
+    TextureViewArray(TextureViewDimension, ()),
     /// A sampler.
     Sampler(SamplerId),
     /// A buffer containing plain old data.
@@ -417,6 +419,9 @@ impl<'a> From<&'a OwnedBindingResource> for BindingResourceId {
             OwnedBindingResource::Data(_) => BindingResourceId::DataBuffer,
             OwnedBindingResource::TextureView(ref texture_view_dimension, ref texture_view) => {
                 BindingResourceId::TextureView(*texture_view_dimension, texture_view.id())
+            }
+            OwnedBindingResource::TextureViewArray(texture_view_dimension, _) => {
+                BindingResourceId::TextureViewArray(texture_view_dimension, ())
             }
             OwnedBindingResource::Sampler(_, ref sampler) => {
                 BindingResourceId::Sampler(sampler.id())
@@ -970,6 +975,10 @@ impl MaterialBindlessSlab {
                     }
                 }
 
+                OwnedBindingResource::TextureViewArray(..) => {
+                    todo!()
+                }
+
                 OwnedBindingResource::Sampler(sampler_binding_type, ref sampler) => {
                     let bindless_resource_type = BindlessResourceType::from(sampler_binding_type);
                     match self
@@ -1060,6 +1069,9 @@ impl MaterialBindlessSlab {
                     } else {
                         true
                     }
+                }
+                OwnedBindingResource::TextureViewArray(..) => {
+                    todo!()
                 }
                 OwnedBindingResource::Sampler(sampler_binding_type, sampler) => {
                     let bindless_resource_type = BindlessResourceType::from(sampler_binding_type);

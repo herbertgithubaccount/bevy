@@ -641,6 +641,7 @@ pub struct BindingResources(pub Vec<(u32, OwnedBindingResource)>);
 pub enum OwnedBindingResource {
     Buffer(Buffer),
     TextureView(TextureViewDimension, TextureView),
+    TextureViewArray(TextureViewDimension, &'static [&'static wgpu::TextureView]),
     Sampler(SamplerBindingType, Sampler),
     Data(OwnedData),
 }
@@ -663,6 +664,9 @@ impl OwnedBindingResource {
         match self {
             OwnedBindingResource::Buffer(buffer) => buffer.as_entire_binding(),
             OwnedBindingResource::TextureView(_, view) => BindingResource::TextureView(view),
+            OwnedBindingResource::TextureViewArray(_, views) => {
+                BindingResource::TextureViewArray(*views)
+            }
             OwnedBindingResource::Sampler(_, sampler) => BindingResource::Sampler(sampler),
             OwnedBindingResource::Data(_) => panic!("`OwnedData` has no binding resource"),
         }
